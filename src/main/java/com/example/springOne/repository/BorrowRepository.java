@@ -11,4 +11,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
     List<Borrow> findByUsername(String username);
 
     List<Borrow> findByBookAndReturnedFalse(Book book);
+
+    boolean existsByBook(Book book);
+
+    List<Borrow> findByBook(Book book);   // 👈 add this
 }

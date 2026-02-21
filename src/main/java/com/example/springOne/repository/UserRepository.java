@@ -3,7 +3,8 @@ package com.example.springOne.repository;
 import com.example.springOne.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import java.util.Optional;
 
-    User findByUsername(String username);
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByUsername(String username);
 }
