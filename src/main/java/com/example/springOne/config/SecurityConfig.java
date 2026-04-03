@@ -16,30 +16,23 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
 
-                        // ✅ Swagger should be public
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        // public
                         .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/debug-db").permitAll()
 
-                        // admin
+                        // admin only
                         .requestMatchers(
                                 "/books/new",
-                                "/books",
                                 "/books/edit/**",
                                 "/books/update/**",
                                 "/books/delete/**"
-                        ).authenticated()
-
-
-                        .requestMatchers(
-                                "/books/borrow/**",
-                                "/books/return/**",
-                                "/my-borrows").authenticated()
+                        ).hasRole("ADMIN")
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/books").hasRole("ADMIN")
 
                         // logged-in users
                         .requestMatchers(
@@ -53,7 +46,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/my-borrows", true)
+                        .defaultSuccessUrl("/books", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

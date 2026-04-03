@@ -8,8 +8,8 @@
 
 <h2 th:text="'Borrow: ' + ${book.title}"></h2>
 
-<div th:if="${isBorrowed}" class="alert alert-warning mt-3">
-  This book is currently borrowed.
+<div th:if="${isBorrowed}" class="alert alert-danger">
+  No copies are currently available.
 </div>
 
 <div th:if="${!isBorrowed}" class="mt-3">

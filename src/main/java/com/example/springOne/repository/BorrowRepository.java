@@ -14,5 +14,8 @@ public interface BorrowRepository extends JpaRepository<Borrow, Long> {
 
     boolean existsByBook(Book book);
 
+
+    long countByBookAndReturnedFalse(Book book);
+    
     List<Borrow> findByBook(Book book);   // 👈 add this
 }

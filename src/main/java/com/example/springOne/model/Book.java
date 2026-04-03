@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+
 @Entity
 public class Book {
 
@@ -15,10 +16,11 @@ public class Book {
     private String title;
     private String author;
     private Integer year;
+    private Double pricePerDay;
+
+    private Integer totalCopies;
 
     public Book() {}
-
-    // GETTERS
 
     public Long getId() {
         return id;
@@ -33,10 +35,12 @@ public class Book {
     }
 
     public Integer getYear() {
-        return year;   // ⚠️ NO unboxing
+        return year;
     }
 
-    // SETTERS
+    public Double getPricePerDay() {
+        return pricePerDay;
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -51,6 +55,19 @@ public class Book {
     }
 
     public void setYear(Integer year) {
-        this.year = year;  // ⚠️ NO int
+        this.year = year;
+    }
+
+    public void setPricePerDay(Double pricePerDay) {
+        this.pricePerDay = pricePerDay;
+    }
+
+
+    public Integer getTotalCopies() {
+        return totalCopies;
+    }
+
+    public void setTotalCopies(Integer totalCopies) {
+        this.totalCopies = totalCopies;
     }
 }

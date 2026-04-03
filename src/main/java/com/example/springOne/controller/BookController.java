@@ -64,12 +64,15 @@ public class BookController {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) return "redirect:/books?error=bookNotFound";
 
-        boolean isBorrowed =
-                !borrowRepository.findByBookAndReturnedFalse(book).isEmpty();
+        long activeBorrows = borrowRepository.countByBookAndReturnedFalse(book);
+        int totalCopies = book.getTotalCopies() != null ? book.getTotalCopies() : 0;
+        int availableCopies = Math.max(totalCopies - (int) activeBorrows, 0);
+
+        boolean isBorrowed = availableCopies <= 0;
 
         model.addAttribute("book", book);
         model.addAttribute("isBorrowed", isBorrowed);
-
+        model.addAttribute("availableCopies", availableCopies);
 
         return "borrow-book";
     }
@@ -85,8 +88,14 @@ public class BookController {
         Book book = bookRepository.findById(id).orElse(null);
         if (book == null) return "redirect:/books?error=bookNotFound";
 
-        if (!borrowRepository.findByBookAndReturnedFalse(book).isEmpty()) {
-            return "redirect:/books?error=alreadyBorrowed";
+        long activeBorrows = borrowRepository.countByBookAndReturnedFalse(book);
+
+        if (book.getTotalCopies() == null || book.getTotalCopies() <= 0) {
+            return "redirect:/books?error=noCopiesConfigured";
+        }
+
+        if (activeBorrows >= book.getTotalCopies()) {
+            return "redirect:/books?error=noCopiesAvailable";
         }
 
         if (days < 1) days = 1;
@@ -160,6 +169,8 @@ public class BookController {
         book.setTitle(updatedBook.getTitle());
         book.setAuthor(updatedBook.getAuthor());
         book.setYear(updatedBook.getYear());
+        book.setPricePerDay(updatedBook.getPricePerDay());
+        book.setTotalCopies(updatedBook.getTotalCopies());
         bookRepository.save(book);
 
         return "redirect:/books";
